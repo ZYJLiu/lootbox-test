@@ -12,7 +12,7 @@ pub use switchboard_v2::{
     OracleQueueAccountData, PermissionAccountData, SbState, VrfAccountData, VrfRequestRandomness,
 };
 
-declare_id!("2XjrCH6yUn85W7d3ZiYAEk8jaknzxXcm1Jf8zXin7pwV");
+declare_id!("ExH9v81oi6CZuGhDAdtuCf6R4XTaLvq9h9tr7bHhz6QA");
 
 #[program]
 pub mod lootbox {
@@ -39,7 +39,7 @@ pub mod lootbox {
     }
 
     #[access_control(ctx.accounts.validate(&ctx))]
-    pub fn mint_rewards(mut ctx: Context<MintReward>) -> Result<()> {
+    pub fn mint_reward(mut ctx: Context<MintReward>) -> Result<()> {
         MintReward::actuate(&mut ctx)
     }
 }

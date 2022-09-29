@@ -6,7 +6,6 @@ pub struct RequestRandomness<'info> {
         mut,
         seeds = [
             payer.key().as_ref(),
-            vrf.key().as_ref(),
         ],
         bump = state.load()?.bump,
         has_one = vrf @ LootboxErrorCode::InvalidVrfAccount
@@ -67,7 +66,8 @@ pub struct RequestRandomness<'info> {
     #[account(mut)]
     pub stake_mint: Account<'info, Mint>,
     // Stake Reward Account
-    #[account(mut, token::authority = payer)]
+    #[account(mut,
+        token::authority = payer)]
     pub stake_token_account: Box<Account<'info, TokenAccount>>,
     pub token_program: Program<'info, Token>,
 }
@@ -100,9 +100,8 @@ impl RequestRandomness<'_> {
             token_program: ctx.accounts.token_program.to_account_info(),
         };
 
-        let vrf_key = ctx.accounts.vrf.key();
         let payer = ctx.accounts.payer.key();
-        let state_seeds: &[&[&[u8]]] = &[&[payer.as_ref(), vrf_key.as_ref(), &[bump]]];
+        let state_seeds: &[&[&[u8]]] = &[&[payer.as_ref(), &[bump]]];
 
         msg!("requesting randomness");
         vrf_request_randomness.invoke_signed(

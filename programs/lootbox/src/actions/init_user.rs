@@ -7,7 +7,6 @@ pub struct InitUser<'info> {
         init,
         seeds = [
             payer.key().as_ref(),
-            vrf.key().as_ref()
         ],
         payer = payer,
         space = 8 + std::mem::size_of::<UserState>(),

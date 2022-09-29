@@ -2,15 +2,21 @@ use crate::*;
 
 #[derive(Accounts)]
 pub struct MintReward<'info> {
-    #[account(mut)]
+    #[account(
+        mut,
+        seeds = [
+            payer.key().as_ref(),
+        ],
+        bump = state.load()?.bump,
+    )]
     pub state: AccountLoader<'info, UserState>,
     #[account(mut)]
     pub mint: Account<'info, Mint>,
     #[account(
         init_if_needed,
-        payer = user,
+        payer = payer,
         associated_token::mint = mint,
-        associated_token::authority = user
+        associated_token::authority = payer
     )]
     pub token_account: Account<'info, TokenAccount>,
     /// CHECK: only used as a signing PDA
@@ -21,7 +27,7 @@ pub struct MintReward<'info> {
     pub rent: Sysvar<'info, Rent>,
     pub system_program: Program<'info, System>,
     #[account(mut)]
-    pub user: Signer<'info>,
+    pub payer: Signer<'info>,
 }
 
 // mint randomly selected lootbox token

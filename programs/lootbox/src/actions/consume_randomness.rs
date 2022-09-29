@@ -6,7 +6,6 @@ pub struct ConsumeRandomness<'info> {
         mut,
         seeds = [
             payer.key().as_ref(),
-            vrf.key().as_ref(),
         ],
         bump = state.load()?.bump,
         has_one = vrf @ LootboxErrorCode::InvalidVrfAccount
