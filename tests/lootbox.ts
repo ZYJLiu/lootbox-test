@@ -1,4 +1,4 @@
-// localhost test command
+// localhost test command, requires docker
 //sbv2 anchor test --keypair ~/.config/solana/id.json -s
 
 import * as anchor from "@project-serum/anchor"
@@ -33,7 +33,6 @@ describe("lootbox", () => {
   const provider = program.provider as anchor.AnchorProvider
   const wallet = anchor.workspace.Lootbox.provider.wallet
   const connection = anchor.getProvider().connection
-  // const payer = (provider.wallet as sbv2.AnchorWallet).payer
 
   let switchboard: SwitchboardTestContext
 
@@ -49,18 +48,19 @@ describe("lootbox", () => {
   let stakeTokenAccount: Account
 
   before(async () => {
-    // switchboard = await SwitchboardTestContext.loadDevnetQueue(
-    //   provider,
-    //   "F8ce7MsckeZAbAGmxjJNetxYXQa9mKr9nnrC3qKubyYy",
-    //   100_000_000
-    // )
-
-    // console.log(switchboard.mint.address.toString())
-    switchboard = await SwitchboardTestContext.loadFromEnv(
-      program.provider as anchor.AnchorProvider,
-      undefined,
-      5_000_000 // .005 wSOL
+    // switchboard testing setup
+    switchboard = await SwitchboardTestContext.loadDevnetQueue(
+      provider,
+      "F8ce7MsckeZAbAGmxjJNetxYXQa9mKr9nnrC3qKubyYy",
+      100_000_000
     )
+
+    console.log(switchboard.mint.address.toString())
+    // switchboard = await SwitchboardTestContext.loadFromEnv(
+    //   program.provider as anchor.AnchorProvider,
+    //   undefined,
+    //   5_000_000 // .005 wSOL
+    // )
     await switchboard.oracleHeartbeat()
     const queueData = await switchboard.queue.loadData()
     console.log(`oracleQueue: ${switchboard.queue.publicKey}`)
@@ -245,22 +245,6 @@ describe("lootbox", () => {
     )
     const [programStateAccount, switchboardStateBump] =
       sbv2.ProgramStateAccount.fromSeed(switchboard.program)
-
-    // console.log(userState.toBase58())
-    // console.log(vrfAccount.publicKey.toBase58())
-    // console.log(queueAccount.publicKey.toBase58())
-    // console.log(queueState.authority.toBase58())
-    // console.log(queueState.dataBuffer.toBase58())
-    // console.log(permissionAccount.publicKey.toBase58())
-    // console.log(vrfState.escrow.toBase58())
-    // console.log(programStateAccount.publicKey.toBase58())
-    // console.log(switchboard.program.programId.toBase58())
-    // console.log(switchboard.payerTokenWallet.toBase58())
-    // console.log(wallet.publicKey.toBase58())
-    // console.log(anchor.web3.SYSVAR_RECENT_BLOCKHASHES_PUBKEY.toBase58())
-    // console.log(stakeMint.toBase58())
-    // console.log(stakeTokenAccount.address.toBase58())
-    // console.log(TOKEN_PROGRAM_ID.toBase58())
 
     const tx = await program.methods
       .requestRandomness()

@@ -12,7 +12,7 @@ pub use switchboard_v2::{
     OracleQueueAccountData, PermissionAccountData, SbState, VrfAccountData, VrfRequestRandomness,
 };
 
-declare_id!("ExH9v81oi6CZuGhDAdtuCf6R4XTaLvq9h9tr7bHhz6QA");
+declare_id!("BeQmUYJZNqgtu2dy3S4RSSxqrhJjNdVoJ81VHGqSt3Uh");
 
 #[program]
 pub mod lootbox {
